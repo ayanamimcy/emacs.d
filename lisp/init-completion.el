@@ -133,6 +133,94 @@ folder, otherwise delete a word"
   (consult-line (thing-at-point 'symbol)))
 )
 
+(use-package corfu
+  :ensure t
+  :hook (after-init . global-corfu-mode)
+  :bind
+  (:map corfu-map
+        ("SPC" . corfu-insert-separator)    ; configure space for separator insertion
+        ("M-q" . corfu-quick-complete)      ; use C-g to exit
+        ("TAB" . corfu-next)
+        ([tab] . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ([backtab] . corfu-previous))
+  :config
+  ;; TAB cycle if there are only few candidates
+  (setq completion-cycle-threshold 0)
+  (setq tab-always-indent 'complete)
+
+  (defun corfu-enable-always-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+    (unless (or (bound-and-true-p mct--active)
+                (bound-and-true-p vertico--input))
+      ;; (setq-local corfu-auto nil) Enable/disable auto completion
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
+
+  ;; enable corfu in eshell
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (setq-local corfu-auto nil)
+              (corfu-mode)))
+
+  ;; For Eshell
+  ;; ===========
+  ;; avoid press RET twice in Eshell
+  (defun corfu-send-shell (&rest _)
+    "Send completion candidate when inside comint/eshell."
+    (cond
+     ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+      (eshell-send-input))
+     ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+      (comint-send-input))))
+
+  (advice-add #'corfu-insert :after #'corfu-send-shell)
+
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  )
+
+;; Add extensions
+(use-package cape
+  :commands (cape-file cape-elisp-block cape-keyword)
+  :autoload (cape-wrap-noninterruptible cape-wrap-nonexclusive cape-wrap-buster)
+  :autoload (cape-wrap-silent)
+  :init
+  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;; (add-to-list 'completion-at-point-functions #'cape-abbrev)
+
+  ;; Make these capfs composable.
+  (advice-add 'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
+  (advice-add 'lsp-completion-at-point :around #'cape-wrap-nonexclusive)
+  (advice-add 'comint-completion-at-point :around #'cape-wrap-nonexclusive)
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive))
+
+(use-package yasnippet
+:ensure t
+:diminish yas-minor-mode
+:hook ((after-init . yas-reload-all)
+       ((prog-mode LaTeX-mode org-mode) . yas-minor-mode))
+:config
+;; Suppress warning for yasnippet code.
+(require 'warnings)
+(add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+
+(setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
+(defun smarter-yas-expand-next-field ()
+  "Try to `yas-expand' then `yas-next-field' at current cursor position."
+  (interactive)
+  (let ((old-point (point))
+        (old-tick (buffer-chars-modified-tick)))
+    (yas-expand)
+    (when (and (eq old-point (point))
+               (eq old-tick (buffer-chars-modified-tick)))
+      (ignore-errors (yas-next-field))))))
+
 (provide 'init-completion)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-org.el ends here

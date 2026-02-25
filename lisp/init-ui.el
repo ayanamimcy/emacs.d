@@ -26,7 +26,7 @@
   ;; `ef-themes-light-themes'.
 
   ;; 如果你不喜欢随机主题，也可以直接固定选择一个主题，如下：
-  ;; (ef-themes-select 'ef-summer)
+  ;;(ef-themes-select 'ef-dream)
 
   ;; 随机挑选一款主题，如果是命令行打开Emacs，则随机挑选一款黑色主题
   (if (display-graphic-p)
