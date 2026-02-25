@@ -53,6 +53,7 @@ folder, otherwise delete a word"
   )
 
 (use-package marginalia
+  :ensure t
   :hook (after-init . marginalia-mode))
 
 (use-package consult
@@ -182,6 +183,7 @@ folder, otherwise delete a word"
 
 ;; Add extensions
 (use-package cape
+  :ensure t
   :commands (cape-file cape-elisp-block cape-keyword)
   :autoload (cape-wrap-noninterruptible cape-wrap-nonexclusive cape-wrap-buster)
   :autoload (cape-wrap-silent)

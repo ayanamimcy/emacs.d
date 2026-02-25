@@ -1048,6 +1048,7 @@ folder, otherwise delete a word"
 ** marginalia
 #+BEGIN_SRC emacs-lisp
   (use-package marginalia
+    :ensure t
     :hook (after-init . marginalia-mode))  
 #+END_SRC
 ** consult
@@ -1183,6 +1184,7 @@ folder, otherwise delete a word"
 #+BEGIN_SRC emacs-lisp
   ;; Add extensions
   (use-package cape
+    :ensure t
     :commands (cape-file cape-elisp-block cape-keyword)
     :autoload (cape-wrap-noninterruptible cape-wrap-nonexclusive cape-wrap-buster)
     :autoload (cape-wrap-silent)
