@@ -1,164 +1,8 @@
-#+TITLE: Emacs配置信息
-#+AUTHOR: Ayanami
-#+DATE: 2026/02/24
-#+STARTUP: overview
-
-* early-init.el
-:PROPERTIES:
-:HEADER-ARGS: :tangle early-init.el
-:END:
-
-在Emacs刚启动，还未加载主要配置文件时的配置文件。
-
-#+BEGIN_SRC emacs-lisp
-  ;;; early-init.el --- Emacs pre-initialization config -*- lexical-binding: t -*-
-  ;;; Commentary:
-
-  ;;; Code:
-
-  ;; 设置垃圾回收参数
-  (setq gc-cons-threshold most-positive-fixnum)
-  (setq gc-cons-percentage 0.6)
-
-  ;; 启动早期不加载`package.el'包管理器
-  (setq package-enable-at-startup nil)
-  ;; 不从包缓存中加载
-  (setq package-quickstart nil)
-
-  ;; 禁止展示菜单栏、工具栏和纵向滚动条
-  (push '(menu-bar-lines . 0) default-frame-alist)
-  (push '(tool-bar-lines . 0) default-frame-alist)
-  (push '(vertical-scroll-bars) default-frame-alist)
-
-  ;; 禁止自动缩放窗口先
-  (setq frame-inhibit-implied-resize t)
-
-  ;; 禁止菜单栏、工具栏、滚动条模式，禁止启动屏幕和文件对话框
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (setq inhibit-splash-screen t)
-  (setq use-file-dialog nil)
-
-  ;; 开机全屏
-  (add-hook 'window-setup-hook #'toggle-frame-maximized t)
-  ;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
-
-  ;; 在这个阶段不编译
-  (setq comp-deferred-compilation nil)
-
-  (provide 'early-init)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;; early-init.el ends here
-#+END_SRC
-
-* init.el
-:PROPERTIES:
-:HEADER-ARGS: :tangle init.el
-:END:
-
-=init.el= 是Emacs的主要配置文件。
-
-** init.el 文件头
-#+BEGIN_SRC emacs-lisp
-;;; init.el --- The main init entry for Emacs -*- lexical-binding: t -*-
-;;; Commentary:
-
-;;; Code:
-
-#+END_SRC
-
-** package包管理配置
-#+begin_src emacs-lisp
-(require 'package)
-(setq package-archives
-	  '(("melpa"  . "https://melpa.org/packages/")
-	    ("gnu"    . "https://elpa.gnu.org/packages/")
-	    ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-
-(package-initialize)
-#+end_src
-
-** 安装use-package插件
-[[https://github.com/jwiegley/use-package][use-package]] 是一个让Emacs配置更加结构化更加清晰的一个宏插件。
-
-#+begin_src emacs-lisp
-;; 安装 `use-package'
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-;; 配置 `use-package'
-(eval-and-compile
-  (setq use-package-always-ensure nil)
-  (setq use-package-always-defer nil)
-  (setq use-package-expand-minimally nil)
-  (setq use-package-enable-imenu-support t)
-  (if (daemonp)
-	  (setq use-package-always-demand t)))
-
-(eval-when-compile
-  (require 'use-package))
-
-;; 安装 `use-package' 的集成模块
-(use-package diminish
-  :ensure t)
-(use-package bind-key
-  :ensure t)
-#+end_src
-
-** quelpa包管理器
-[[https://github.com/quelpa/quelpa][quelpa]] 是配合 =package.el= 使用的，基于git的一个包管理器。
-#+BEGIN_SRC emacs-lisp
-;; 安装 `quelpa'
-(use-package quelpa
-  :ensure t
-  :commands quelpa
-  :config
-  :custom
-  (quelpa-git-clone-depth 1)
-  (quelpa-update-melpa-p nil)
-  (quelpa-self-upgrade-p nil)
-  (quelpa-checkout-melpa-p nil))
-
-;; `quelpa' 与 `use-package' 集成
-(use-package quelpa-use-package
-  :ensure t)
-#+END_SRC
-** 加载模块化配置
-#+BEGIN_SRC emacs-lisp
-;; 将lisp目录放到加载路径的前面以加快启动速度
-(let ((dir (locate-user-emacs-file "lisp")))
-  (add-to-list 'load-path (file-name-as-directory dir)))
-
-;; 加载各模块化配置
-;; 不要在`*message*'缓冲区显示加载模块化配置的信息
-(with-temp-message ""
-  (require 'init-ui)                    ; 加载UI交互的模块化配置文件
-  )
-#+END_SRC
-** init.el 文件尾
-#+BEGIN_SRC emacs-lisp
-
-(provide 'init)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; init.el ends here
-#+END_SRC
-
-* init-ui.el
-:PROPERTIES:
-:HEADER-ARGS: :tangle lisp/init-ui.el :mkdirp yes
-:END:
-** init-ui.el 文件头
-#+BEGIN_SRC emacs-lisp
 ;;; init-ui.el --- UI settings -*- lexical-binding: t -*-
 ;;; Commentary:
 
 ;;; Code:
 
-#+END_SRC
-** ef主题
-#+BEGIN_SRC emacs-lisp
 (use-package ef-themes
   :ensure t
   :bind ("C-c t" . ef-themes-toggle)
@@ -204,15 +48,7 @@
     (ef-themes-select 'ef-summer)
     )
   )
-#+END_SRC
-** 字体设置
-[[https://protesilaos.com/emacs/fontaine][fontaine]] 插件可以根据需要高度定制字体。
-#+BEGIN_QUOTE
-这篇文章可以作为字体设置的参考：
-[[http://xahlee.info/emacs/emacs/emacs_list_and_set_font.html]]
-#+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
 (use-package fontaine
   :ensure t
   :when (display-graphic-p)
@@ -301,15 +137,7 @@
                                   ("Apple Color Emoji"   . 0.91)
                                   ))
   )
-#+END_SRC
 
-#+CAPTION: 测试中英文字体对齐
-#+NAME: 测试中英文字体对齐
-| 中文  |   |
-| abcd |   |
-** 调整启动窗口大小
-
-#+BEGIN_SRC emacs-lisp
 ;; 设置窗口大小，仅仅在图形界面需要设置
 (when (display-graphic-p)
   (let ((top    0)                                     ; 顶不留空
@@ -323,10 +151,7 @@
       (add-to-list 'default-frame-alist (cons 'left left))
       (add-to-list 'default-frame-alist (cons 'height height))
       (add-to-list 'default-frame-alist (cons 'width width)))))
-#+END_SRC
-** 其他UI零散设置项
 
-#+begin_src emacs-lisp
 ;; 禁用一些GUI特性
 (setq use-dialog-box nil)               ; 鼠标操作不使用对话框
 (setq inhibit-default-init t)           ; 不加载 `default' 库
@@ -442,12 +267,7 @@
 
 ;; 在模式栏上显示当前光标的列号
 (column-number-mode t)
-#+end_src
-** 编码设置
 
-统一使用 UTF-8 编码。
-
-#+begin_src emacs-lisp
 ;; 配置所有的编码为UTF-8，参考：
 ;; https://thraxys.wordpress.com/2016/01/13/utf-8-in-emacs-everywhere-forever/
 (setq locale-coding-system 'utf-8)
@@ -463,13 +283,7 @@
 (modify-coding-system-alist 'process "*" 'utf-8)
 (when (display-graphic-p)
   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
-#+end_src
-** 模式栏设置
-*** doom-modeline插件
 
-[[https://github.com/seagle0128/doom-modeline][doom-modeline]] 是一个模式栏美化插件。
-
-#+begin_src emacs-lisp
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode)
@@ -482,20 +296,11 @@
   (doom-modeline-persp-name nil)
   (doom-modeline-unicode-fallback t)
   (doom-modeline-enable-word-count nil))
-#+end_src
 
-*** minions插件
-[[https://github.com/tarsius/minions][minions]] 插件能让模式栏变得清爽，将次要模式隐藏起来。
-
-#+BEGIN_SRC emacs-lisp
 (use-package minions
   :ensure t
   :hook (after-init . minions-mode))
-#+END_SRC
-** keycast按键展示
-[[https://github.com/tarsius/keycast][keycast mode]] 插件可以在模式栏上展示所有的按键，以及对应的函数。
 
-#+BEGIN_SRC emacs-lisp
 (use-package keycast
   :ensure t
   :hook (after-init . keycast-mode)
@@ -530,11 +335,7 @@
         '((minibuffer . nil)))
   (setq keycast-log-newest-first t)
   )
-#+END_SRC
-** init-ui.el 文件尾
-#+BEGIN_SRC emacs-lisp
 
 (provide 'init-ui)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-ui.el ends here
-#+END_SRC

@@ -27,6 +27,10 @@
 (setq inhibit-splash-screen t)
 (setq use-file-dialog nil)
 
+;; 开机全屏
+(add-hook 'window-setup-hook #'toggle-frame-maximized t)
+;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
 ;; 在这个阶段不编译
 (setq comp-deferred-compilation nil)
 
