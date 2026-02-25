@@ -57,22 +57,11 @@
 ;; 不要在`*message*'缓冲区显示加载模块化配置的信息
 (with-temp-message ""
   (require 'init-ui)                    ; 加载UI交互的模块化配置文件
-  (require 'init-edit)                    ; 加载编辑相关的配置
-  (require 'init-org)                    ; 加载org相关的配置
+  (require 'init-edit)                  ; 加载编辑相关的配置
+  (require 'init-org)                   ; 加载org相关的配置
+  (require 'init-completion)            ; 加载自动补全相关的配置    
   )
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
