@@ -13,6 +13,8 @@
 (use-package org
     :ensure nil
     :mode ("\\.org\\'" . org-mode)
+    :bind (("C-c a" . org-agenda) ;; 绑定相应的快捷键
+           ("C-c x" . org-capture))
     :hook ((org-mode . visual-line-mode)
   		 (org-mode . my/org-prettify-symbols))
     :commands (org-find-exact-headline-in-buffer org-set-tags)
@@ -316,6 +318,36 @@
   ;; #+关键字美化，我们使用了 `prettify-symbols-mode'
   (setq org-modern-keyword nil)
   )
+
+(setq org-capture-templates `(("t" "Tasks" entry (file+headline "tasks.org" "Reminders")
+                               "* TODO %i%?"
+                          :empty-lines-after 1
+                          :prepend t)
+                         ("n" "Notes" entry (file+headline "notes.org" "Notes")
+                          "* %? %^g\n%i\n"
+                          :empty-lines-after 1)
+                         ("i" "Inbox" entry (file+headline "inbox.org" "Inboxs")
+                          "* %? %^g\n%i\n"
+                          :empty-lines-after 1)                                                     
+                         ;; For EWW
+                         ("b" "Bookmarks" entry (file+headline "capture.org" "Bookmarks")
+                          "* %:description\n\n%a%?"
+                          :empty-lines 1
+                          :immediate-finish t)
+                         ("d" "Diary")
+                         ("dt" "Today's TODO list" entry (file+olp+datetree "diary.org")
+                          "* Today's TODO list [/]\n%T\n\n** TODO %?"
+                          :empty-lines 1
+                          :jump-to-captured t)
+                         ("dw" "Today's work" entry (file+olp+datetree "diary-work.org")
+                          "* %?\n%T\n\n%i"
+                          :empty-lines 1
+                          :jump-to-captured t)
+                         ("do" "Other stuff" entry (file+olp+datetree "diary.org")
+                          "* %?\n%T\n\n%i"
+                          :empty-lines 1
+                          :jump-to-captured t)
+                         ))
 
 (use-package org-appear
   :ensure t
