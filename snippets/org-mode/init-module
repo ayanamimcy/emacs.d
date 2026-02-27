@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# name: init module org skeleton
+# key: init-module
+# --
+* ${1:`(read-string "Module name (init-xxx): " "init-git")`}.el
+:PROPERTIES:
+:HEADER-ARGS: :tangle lisp/${1}.el :mkdirp yes
+:END:
+
+** ${1} 文件头
+#+BEGIN_SRC emacs-lisp
+;;; ${1}.el --- Org mode settings -*- lexical-binding: t -*-
+;;; Commentary:
+
+;;; Code:
+#+END_SRC
+** ${1} 文件尾
+
+#+BEGIN_SRC emacs-lisp
+
+(provide '${1})
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ${1}.el ends here
+#+END_SRC
