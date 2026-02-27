@@ -137,11 +137,16 @@
     (require 'init-ui)                    ; 加载UI交互的模块化配置文件
     (require 'init-edit)                  ; 加载编辑相关的配置
     (require 'init-org)                   ; 加载org相关的配置
-    (require 'init-completion)            ; 加载自动补全相关的配置    
+    (require 'init-completion)            ; 加载自动补全相关的配置
+    (require 'init-git)                   ; 加载magit相关的配置
     )
 #+END_SRC
 ** init.el 文件尾
 #+BEGIN_SRC emacs-lisp
+
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1272,3 +1277,36 @@ folder, otherwise delete a word"
 ;;; init-org.el ends here
 #+END_SRC
 
+* init-git.el
+:PROPERTIES:
+:HEADER-ARGS: :tangle lisp/init-git.el :mkdirp yes
+:END:
+
+** init-git 文件头
+#+BEGIN_SRC emacs-lisp
+  ;;; init-git.el --- Org mode settings -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+  ;;; Code:
+  #+END_SRC
+
+** 配置magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :hook (git-commit-mode . flyspell-mode)
+    :bind (("C-x g"   . magit-status)
+           ("C-x M-g" . magit-dispatch)
+           ("C-c M-g" . magit-file-dispatch))
+    :custom
+    (magit-diff-refine-hunk t)
+    (magit-ediff-dwim-show-on-hunks t))
+#+END_SRC
+** init-git 文件尾
+
+#+BEGIN_SRC emacs-lisp
+
+  (provide 'init-git)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;; init-git.el ends here
+  #+END_SRC

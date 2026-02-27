@@ -59,8 +59,13 @@
   (require 'init-ui)                    ; 加载UI交互的模块化配置文件
   (require 'init-edit)                  ; 加载编辑相关的配置
   (require 'init-org)                   ; 加载org相关的配置
-  (require 'init-completion)            ; 加载自动补全相关的配置    
+  (require 'init-completion)            ; 加载自动补全相关的配置
+  (require 'init-git)                   ; 加载magit相关的配置
   )
+
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
