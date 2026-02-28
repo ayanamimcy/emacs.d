@@ -222,6 +222,9 @@ folder, otherwise delete a word"
     (when (and (eq old-point (point))
                (eq old-tick (buffer-chars-modified-tick)))
       (ignore-errors (yas-next-field))))))
+;; 追加一些模版
+(use-package yasnippet-snippets
+  :ensure t)
 
 (provide 'init-completion)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
