@@ -1,0 +1,25 @@
+# 本机设置
+/custom.el
+/custom-post.el
+
+# 包和缓存
+/elpa/
+/eln-cache/
+*.elc
+
+# 运行时生成的状态
+/backups/
+/auto-save/
+/auto-save-list/
+/transient/
+/url/
+/eshell/
+/server/
+/recentf
+/savehist
+/places
+/bookmarks
+/tramp
+/projects
+/network-security.data
+/.org-id-locations
