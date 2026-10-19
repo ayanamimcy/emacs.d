@@ -2,8 +2,7 @@
 
 个人 Emacs 配置，Mac 和 Linux 共用。主要用途：日程管理、工作记录、笔记、博客，加上轻量写代码。
 
-框架参照 [Centaur Emacs](https://github.com/seagle0128/.emacs.d)：分层加载、选项集中在 `init-custom.el`、
-每台机器的差异写在不进 git 的 `custom.el`。内容只保留用得到的部分。需要 **Emacs 30.1 以上**。
+分层加载，选项集中在 `init-custom.el`，每台机器的差异写在不进 git 的 `custom.el`。需要 **Emacs 30.1 以上**。
 
 ## 安装
 
@@ -121,7 +120,7 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 ### 浮动窗口
 
 图形界面里，补全列表（`M-x`、`C-x b`、查找文件等）和按键提示（which-key）显示在窗口中间偏下的浮动窗口
-（child frame，vertico-posframe / which-key-posframe）里，做法参照 Centaur。终端里（`emacsclient -t`）
+（child frame，vertico-posframe / which-key-posframe）里。终端里（`emacsclient -t`）
 用不了浮动窗口，自动在底部显示。daemon 每开一个窗口都会重新判断。
 想一直在底部显示：`custom.el` 里 `(setq my-completion-style 'minibuffer)`。
 

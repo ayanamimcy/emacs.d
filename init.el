@@ -1,7 +1,6 @@
 ;;; init.el --- 入口 -*- lexical-binding: t; no-byte-compile: t -*-
 
 ;;; Commentary:
-;; 框架参照 Centaur Emacs（https://github.com/seagle0128/.emacs.d），
 ;; 只保留日程、写作和轻量写代码用得到的部分。
 ;;
 ;; 加载顺序：常量 → 选项 → 工具函数 → 包管理（读入 custom.el）→ 各功能模块

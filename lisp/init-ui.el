@@ -40,7 +40,7 @@
   :config
   (doom-themes-org-config))
 
-;; Mac 的透明标题栏按 ns-appearance 决定文字颜色，换主题后跟着背景色改（同 Centaur）
+;; Mac 的透明标题栏按 ns-appearance 决定文字颜色，换主题后跟着背景色改
 (defun my-refresh-ns-appearance ()
   "按当前主题的背景色设置标题栏的亮/暗。"
   (when-let* ((rgb (color-name-to-rgb (face-background 'default nil t))))
