@@ -53,6 +53,11 @@
   "暗色主题。"
   :type 'symbol)
 
+(defcustom my-completion-style 'childframe
+  "补全列表、按键提示的显示方式：childframe（窗口中间的浮动窗口）或 minibuffer（底部）。
+终端里用不了浮动窗口，会自动退回底部显示。"
+  :type '(choice (const childframe) (const minibuffer)))
+
 (defcustom my-icon t
   "是否显示图标（需要 Symbols Nerd Font）。"
   :type 'boolean)

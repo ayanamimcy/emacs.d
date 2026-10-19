@@ -14,6 +14,7 @@
 ;; (setq my-theme 'system)                       ; system（跟随 macOS）、light、dark 或主题名
 ;; (setq my-theme-light 'doom-one-light)
 ;; (setq my-theme-dark 'doom-one)
+;; (setq my-completion-style 'minibuffer)        ; 补全列表在底部显示（默认 childframe：窗口中间浮动）
 ;; (setq my-icon nil)                            ; 不显示图标
 ;; (setq my-chinese-calendar nil)                ; 不显示农历和中国节日
 ;; (setq my-japanese-holidays nil)               ; 不显示日本节假日

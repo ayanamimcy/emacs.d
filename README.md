@@ -118,6 +118,13 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 
 补全时可以用拼音首字母筛选中文，比如 `gzjl` 能匹配“工作记录”。
 
+### 浮动窗口
+
+图形界面里，补全列表（`M-x`、`C-x b`、查找文件等）和按键提示（which-key）显示在窗口中间偏下的浮动窗口
+（child frame，vertico-posframe / which-key-posframe）里，做法参照 Centaur。终端里（`emacsclient -t`）
+用不了浮动窗口，自动在底部显示。daemon 每开一个窗口都会重新判断。
+想一直在底部显示：`custom.el` 里 `(setq my-completion-style 'minibuffer)`。
+
 Mac 上 Cmd 是 Meta（`M-x` 就是 Cmd+X），Option 是 Super。
 
 ## 以后

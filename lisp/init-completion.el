@@ -7,6 +7,7 @@
 ;;; Code:
 
 (require 'init-custom)
+(require 'init-funcs)
 
 ;; 空格分隔多个关键词，不分先后（"org cap" 能匹配 org-capture）
 (use-package orderless
@@ -24,12 +25,31 @@
     (orderless-regexp (pinyinlib-build-regexp-string component)))
   (add-to-list 'orderless-matching-styles #'my-orderless-regexp-pinyin))
 
-;; 竖排候选列表
+;; 竖排候选列表。在 after-init 时启用，下面 vertico-posframe 挂在 vertico-mode 上才会触发
 (use-package vertico
   :custom
   (vertico-count 15)
   (vertico-cycle t)
-  :init (vertico-mode 1))
+  :hook (after-init . vertico-mode))
+
+;; 补全列表显示在窗口中间的浮动窗口里。daemon 每开一个图形窗口判断一次
+(defun my-vertico-posframe-setup ()
+  "图形界面里补全列表用浮动窗口显示。"
+  (when (childframe-completion-workable-p)
+    (vertico-posframe-mode 1)))
+
+(defun my-vertico-posframe-poshandler (info)
+  "中间偏下，按 `vertico-count' 预留高度（候选 + 提示行 + 边框），窗口矮时往上移。"
+  (posframe-poshandler-frame-center-near-bottom
+   info (* (+ vertico-count 2) (plist-get info :font-height))))
+
+(use-package vertico-posframe
+  :hook ((vertico-mode server-after-make-frame) . my-vertico-posframe-setup)
+  :custom
+  (vertico-posframe-poshandler #'my-vertico-posframe-poshandler)
+  (vertico-posframe-parameters '((left-fringe . 8) (right-fringe . 8)))
+  :custom-face
+  (vertico-posframe-border ((t (:inherit posframe-border :background unspecified)))))
 
 ;; 选文件时 DEL 删一整级目录
 (use-package vertico-directory
