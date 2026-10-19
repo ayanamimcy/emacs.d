@@ -40,6 +40,17 @@
   :config
   (doom-themes-org-config))
 
+;; Mac 的透明标题栏按 ns-appearance 决定文字颜色，换主题后跟着背景色改（同 Centaur）
+(defun my-refresh-ns-appearance ()
+  "按当前主题的背景色设置标题栏的亮/暗。"
+  (when-let* ((rgb (color-name-to-rgb (face-background 'default nil t))))
+    (let ((mode (if (color-dark-p rgb) 'dark 'light)))
+      (setf (alist-get 'ns-appearance default-frame-alist) mode)
+      (modify-all-frames-parameters `((ns-appearance . ,mode))))))
+
+(when sys/macp
+  (add-hook 'after-load-theme-hook #'my-refresh-ns-appearance))
+
 (defun my-load-theme (theme)
   "关掉其他主题，加载 THEME。"
   (mapc #'disable-theme custom-enabled-themes)
