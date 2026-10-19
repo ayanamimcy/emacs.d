@@ -33,6 +33,12 @@
 (require 'init-org)
 (require 'init-markdown)
 
+;; 文件、终端、写代码
+(require 'init-dired)
+(require 'init-shell)
+(require 'init-vcs)
+(require 'init-prog)
+
 ;; 所有模块加载完之后，本机的覆盖设置
 (when (file-exists-p my-custom-post-file)
   (load my-custom-post-file nil 'nomessage))

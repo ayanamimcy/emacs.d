@@ -96,6 +96,44 @@
   :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
+;;; 文件里的补全（代码、路径、buffer 里出现过的词）
+
+;; 写代码时输入两个字符自动弹出候选；其他地方（写中文时）按 TAB 或 C-M-i 才弹出
+(defun my-corfu-auto-setup ()
+  "在当前 buffer 里自动弹出补全。要在 `corfu-mode' 打开之前调用。"
+  (setq-local corfu-auto t))
+
+(use-package corfu
+  :hook ((after-init . global-corfu-mode)
+         (prog-mode . my-corfu-auto-setup)
+         (global-corfu-mode . corfu-popupinfo-mode)  ; 停一下显示候选项的文档
+         (global-corfu-mode . corfu-history-mode))   ; 常用的排在前面
+  :custom
+  (corfu-auto-prefix 2)
+  (corfu-cycle t)
+  (corfu-popupinfo-delay '(0.5 . 0.2))
+  (tab-always-indent 'complete)              ; 已经缩进好时 TAB 补全
+  (text-mode-ispell-word-completion nil)     ; 写文字时不补全英文单词
+  :config
+  (with-eval-after-load 'savehist
+    (add-to-list 'savehist-additional-variables 'corfu-history)))
+
+;; Emacs 30 的终端里没有浮动窗口，换成用文字画的弹出框
+(unless (featurep 'tty-child-frames)
+  (use-package corfu-terminal
+    :hook (global-corfu-mode . corfu-terminal-mode)))
+
+(use-package nerd-icons-corfu
+  :when my-icon
+  :after corfu
+  :config (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+;; 补全文件路径、buffer 里出现过的词
+(use-package cape
+  :init
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev 90))
+
 (provide 'init-completion)
 
 ;;; init-completion.el ends here

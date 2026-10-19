@@ -42,9 +42,11 @@
   (gcmh-auto-idle-delay-factor 10)
   (gcmh-high-cons-threshold #x4000000)) ; 64MB
 
-(use-package exec-path-from-shell
-  :when (and my-use-exec-path-from-shell (memq window-system '(mac ns)))
-  :config (exec-path-from-shell-initialize))
+;; 包在 :when 不满足时也会被安装，所以外面再包一层，只在 Mac 上装
+(when (and my-use-exec-path-from-shell sys/macp)
+  (use-package exec-path-from-shell
+    :when (memq window-system '(mac ns))
+    :config (exec-path-from-shell-initialize)))
 
 ;; 让 emacsclient 能连上。Linux 上用 systemd 的 emacs.service（daemon）
 (use-package server

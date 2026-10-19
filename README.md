@@ -10,7 +10,7 @@
 
 ```sh
 brew tap d12frosted/emacs-plus
-brew install emacs-plus ripgrep
+brew install emacs-plus ripgrep coreutils
 brew install --cask font-sarasa-gothic font-symbols-only-nerd-font
 
 git clone git@github.com:ayanamimcy/emacs.d.git ~/.config/emacs
@@ -19,6 +19,8 @@ git clone git@github.com:ayanamimcy/emacs.d.git ~/.config/emacs
 按 `brew` 安装完提示的方法把 Emacs.app 放进“应用程序”。第一次启动会自动下载所有包，要等一两分钟。
 
 系统设置 → 键盘 → 键盘快捷键 → 修饰键：把 **Caps Lock 改成 Control**。
+
+tree-sitter 语法要在本机编译，需要 C 编译器：`xcode-select --install`。
 
 ### Linux（CachyOS，偶尔用）
 
@@ -55,6 +57,10 @@ lisp/
   init-calendar.el     农历、中国和日本节假日
   init-org.el          日程、任务、capture、工作记录
   init-markdown.el     Markdown
+  init-dired.el        文件管理（dired）
+  init-shell.el        终端（eat）
+  init-vcs.el          git（magit、diff-hl）
+  init-prog.el         项目、tree-sitter、eglot、flymake
 ```
 
 ### 本机设置
@@ -114,20 +120,58 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 | `C-.` | 对当前候选项执行动作 |
 | `C-x u` | 撤销树 |
 | `F5` | 切换亮色 / 暗色主题 |
+| `` C-` `` / `C-c t` | 在底部弹出 / 收起终端（终端里的 Emacs 只能用 `C-c t`） |
+| `C-x d` / `C-x C-j` | 打开目录 / 当前文件所在的目录 |
+| `C-x g` | magit：当前仓库的状态 |
+| `C-c g` | magit：当前文件的 blame、历史等 |
+| `C-x p p` | 切换项目 |
+| `C-x p f` / `C-x p g` | 在项目里找文件 / 全文搜索 |
+| `M-.` / `M-,` | 跳到定义 / 跳回来 |
+| `M-n` / `M-p` | 下一个 / 上一个错误 |
+| `C-c e r` / `C-c e a` / `C-c e f` | 重命名 / 代码操作 / 格式化（需要语言服务器） |
 
 补全时可以用拼音首字母筛选中文，比如 `gzjl` 能匹配“工作记录”。
 
 ### 浮动窗口
 
-图形界面里，补全列表（`M-x`、`C-x b`、查找文件等）和按键提示（which-key）显示在窗口中间偏下的浮动窗口
-（child frame，vertico-posframe / which-key-posframe）里。终端里（`emacsclient -t`）
+图形界面里，补全列表（`M-x`、`C-x b`、查找文件等）、按键提示（which-key）和 magit 的命令菜单显示在窗口中间偏下的
+浮动窗口（child frame，vertico-posframe / which-key-posframe / transient-posframe）里。终端里（`emacsclient -t`）
 用不了浮动窗口，自动在底部显示。daemon 每开一个窗口都会重新判断。
 想一直在底部显示：`custom.el` 里 `(setq my-completion-style 'minibuffer)`。
 
 Mac 上 Cmd 是 Meta（`M-x` 就是 Cmd+X），Option 是 Super。
 
+## 文件管理
+
+dired 里常用：`RET` 打开、`^` 上一级、`m` / `u` 标记 / 取消、`C` 复制、`R` 重命名或移动、
+`D` 删除（删到废纸篓）、`+` 新建目录、`C-x C-q` 把列表当文本改（批量重命名，`C-c C-c` 保存）。
+两个 dired 窗口并排时，复制和移动的目标默认是另一个窗口。Mac 上装了 coreutils 才会把目录排在前面。
+
+## 写代码
+
+- **补全**：写代码时输入两个字符自动弹出候选；写文字时按 `TAB`（已经缩进好时）或 `C-M-i` 才弹出。
+- **tree-sitter**：第一次打开某种语言的文件时会问要不要下载这种语言的语法（下载后在本机编译，几秒钟），
+  装好后高亮和缩进更准确（重新打开文件生效）。不下载也能用，用的是原来的模式；Go、Rust、TypeScript 这些
+  Emacs 没有自带模式的语言除外，要下载语法才有高亮。语法放在配置目录的 `tree-sitter/` 里。
+- **eglot（LSP）**：打开代码文件时，装了对应语言服务器的自动连上，提供跳转、补全、报错、重命名；
+  没装的语言不会提示。常用的语言服务器：
+
+  | 语言 | 语言服务器 | Mac 安装 |
+  |---|---|---|
+  | Python | basedpyright 或 pylsp | `uv tool install basedpyright` |
+  | JavaScript / TypeScript | typescript-language-server | `npm i -g typescript-language-server typescript` |
+  | Go | gopls | `go install golang.org/x/tools/gopls@latest` |
+  | Rust | rust-analyzer | `rustup component add rust-analyzer` |
+  | C / C++ | clangd | Xcode Command Line Tools 自带 |
+  | Bash | bash-language-server | `npm i -g bash-language-server` |
+
+  Mac 上从 Dock 启动的 Emacs 会从登录 shell 读取 PATH，装在 `~/.local/bin`、`~/go/bin` 等处的程序也能找到。
+- **magit**：`C-x g` 打开状态页，`s` 暂存、`u` 取消暂存、`c c` 提交（写完说明 `C-c C-c`）、`P p` push、
+  `F p` pull、`l l` 看历史，`?` 列出所有命令。行号旁边的颜色条标出改过的行。
+- **终端**：`` C-` `` 在底部弹出终端，在项目里时目录是项目根目录，每个项目一个终端。
+  终端里按键基本都发给 shell，`C-x`、`M-x` 等仍是 Emacs 的；`C-c C-e` 切到可以像普通 buffer 一样移动、复制的模式，`C-c C-j` 回来。
+
 ## 以后
 
 1. 笔记：denote（md 和 org 都支持）
 2. 博客：ox-hugo + Hugo
-3. 写代码：magit、eglot、tree-sitter、corfu
