@@ -5,6 +5,7 @@
 # 包和缓存
 /elpa/
 /eln-cache/
+/tree-sitter/
 *.elc
 
 # 运行时生成的状态
@@ -21,5 +22,7 @@
 /bookmarks
 /tramp
 /projects
+/history
+*.eld
 /network-security.data
 /.org-id-locations
