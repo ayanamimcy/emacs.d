@@ -11,7 +11,7 @@
 ;; (setq my-package-archives 'melpa)             ; 软件源：melpa、tuna、ustc
 ;; (setq my-font "Sarasa Mono SC")               ; 字体（中英文 2:1 的等宽字体）
 ;; (setq my-font-size 150)                       ; 字号，1/10 pt（默认 Mac 150，其他 110）
-;; (setq my-theme 'system)                       ; system（跟随 macOS）、light、dark 或主题名
+;; (setq my-theme 'system)                       ; dark（默认）、light、system（跟随 macOS）或主题名
 ;; (setq my-theme-light 'doom-one-light)
 ;; (setq my-theme-dark 'doom-one)
 ;; (setq my-completion-style 'minibuffer)        ; 补全列表在底部显示（默认 childframe：窗口中间浮动）

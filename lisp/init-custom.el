@@ -41,8 +41,8 @@
   "默认字号，单位 1/10 pt。"
   :type 'integer)
 
-(defcustom my-theme 'system
-  "主题：system 跟随 macOS 亮/暗（其他系统用亮色），light、dark，或者具体的主题名。"
+(defcustom my-theme 'dark
+  "主题：dark（默认）、light、system 跟随 macOS 亮/暗（其他系统用亮色），或者具体的主题名。"
   :type '(choice (const system) (const light) (const dark) symbol))
 
 (defcustom my-theme-light 'doom-one-light
