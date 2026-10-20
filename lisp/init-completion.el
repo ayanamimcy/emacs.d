@@ -80,12 +80,23 @@
          ("M-g M-g" . consult-goto-line)
          ("M-g i"   . consult-imenu)           ; 跳到标题/函数
          ("M-g o"   . consult-outline)
-         ("M-s l"   . consult-line)            ; 在当前文件里搜索
+         ("M-s l"   . my-consult-line)         ; 在当前文件里搜索
+         ([remap isearch-forward] . my-consult-line) ; C-s 也是，列表浮在中间；C-r、C-M-s 仍是 isearch
          ("M-s r"   . consult-ripgrep)         ; 在目录里全文搜索（需要 rg）
-         ("M-s f"   . consult-find))
+         ("M-s f"   . consult-find)
+         :map isearch-mode-map
+         ("M-s l"   . consult-line)            ; 带着 isearch 里输入的词转过去
+         ("M-e"     . consult-isearch-history))
   :custom
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref))
+
+(defun my-consult-line ()
+  "在当前文件里搜索。选中了文字时用它作为初始关键词，没选中时从空白开始（M-n 填入光标处的词）。"
+  (interactive)
+  (consult-line (when (use-region-p)
+                  (prog1 (buffer-substring-no-properties (region-beginning) (region-end))
+                    (deactivate-mark)))))
 
 ;; C-. 对当前候选项（或光标处的东西）执行动作：打开、复制路径、删除……
 (use-package embark

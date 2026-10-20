@@ -71,7 +71,10 @@
   (org-startup-indented t)
   (org-hide-emphasis-markers t)
   (org-ellipsis " ▾")
-  (org-pretty-entities t)
+  (org-pretty-entities t)                  ; \alpha 显示成 α
+  ;; 只有 a_{b} / a^{b} 才算上下标，a_b（变量名等）原样显示和导出
+  (org-use-sub-superscripts '{})
+  (org-export-with-sub-superscripts '{})
   (org-image-actual-width '(600))
 
   (org-capture-templates
