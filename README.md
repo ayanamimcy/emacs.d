@@ -101,6 +101,8 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 
 ## 常用按键
 
+更完整的速查（Emacs 基础、本配置的按键、Org 按键和语法，可筛选）：[Emacs 与 Org 速查](https://claude.ai/artifact/NKVCaoywSZhVnuGnebscKe)
+
 | 按键 | 作用 |
 |---|---|
 | `C-h t` | 内置教程 |
