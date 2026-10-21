@@ -99,6 +99,25 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 %%(org-calendar-holiday)
 ```
 
+### 图片
+
+截图复制到剪贴板后，在 org 文件里按 `C-c y` 粘贴；或者把图片文件从访达 / Dolphin 拖进 Emacs。
+图片都复制到 **org 文件旁边的 `img/`** 目录，插入相对路径的链接，同步到别的电脑、导出博客都能用：
+
+```
+~/org/
+  journal.org
+  img/
+    journal-20261021-103512.png   粘贴的：文件名-日期-时间
+    Screenshot.png                拖进来的：保留原名，重名时加 -1、-2
+```
+
+- 打开文件时自动显示图片，原始大小、但不超过窗口宽度。单张图在链接上面一行写 `#+attr_org: :width 300` 指定宽度。
+  `C-c C-x C-v` 切换显示 / 不显示。
+- 拖进来的不是图片时，会问要附件、打开还是只插入链接。
+- 截图到剪贴板：Mac `⌘⌃⇧4`，Linux 用 Spectacle 截图后复制。
+- 终端里的 Emacs（`emacsclient -t`）显示不了图片，只能看到链接。
+
 ## 常用按键
 
 更完整的速查（Emacs 基础、本配置的按键、Org 按键和语法，可筛选）：[Emacs 与 Org 速查](https://claude.ai/artifact/NKVCaoywSZhVnuGnebscKe)
@@ -116,6 +135,7 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 | `C-c C-t` | 改任务状态 |
 | `C-c C-s` / `C-c C-d` | 设开始日期 / 截止日期 |
 | `C-c C-w` | 把条目移到别的标题下（整理收件箱） |
+| `C-c y` | 在 org 里粘贴剪贴板里的截图（存到 `img/`） |
 | `C-x b` | 切换 buffer / 最近的文件 |
 | `C-s` / `M-s l` | 在当前文件里搜索：列出所有匹配的行，浮在窗口中间，支持拼音首字母。选中了文字时用它作为关键词；`M-n` 按一次填入当前行、两次填入光标处的词 |
 | `C-r` / `C-M-s` | 原来的逐个跳转搜索（向上 / 正则）。搜索中按 `M-s l` 带着已输入的词转到上面的列表，`M-e` 从搜索历史里选 |
