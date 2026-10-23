@@ -51,6 +51,21 @@
 (when sys/macp
   (add-hook 'after-load-theme-hook #'my-refresh-ns-appearance))
 
+;; 终端里（emacsclient -nw）不画主题的背景色，用终端自己的，半透明的终端背景才能透出来。
+;; 只在暗色主题时这样做：亮色主题的深色文字放在暗色终端上看不清
+(defun my-tty-use-terminal-background (&optional frame)
+  "终端里的 FRAME（默认所有 frame）用暗色主题时，默认背景改用终端自己的。"
+  (dolist (f (if frame (list frame) (frame-list)))
+    (unless (display-graphic-p f)
+      (let ((bg (face-background 'default f)))
+        (when (and bg (not (string-prefix-p "unspecified" bg))
+                   (color-dark-p (color-name-to-rgb bg f)))
+          (set-face-background 'default "unspecified-bg" f))))))
+
+(add-hook 'after-make-frame-functions #'my-tty-use-terminal-background)
+(add-hook 'after-load-theme-hook #'my-tty-use-terminal-background)
+(add-hook 'window-setup-hook #'my-tty-use-terminal-background)
+
 (defun my-load-theme (theme)
   "关掉其他主题，加载 THEME。"
   (mapc #'disable-theme custom-enabled-themes)

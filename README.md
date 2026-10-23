@@ -167,6 +167,8 @@ org 里只有 `a_{b}` / `a^{b}` 显示成上下标，`a_b` 原样显示（导出
 
 Mac 上 Cmd 是 Meta（`M-x` 就是 Cmd+X），Option 是 Super。
 
+终端里（`emacsclient -nw`）用暗色主题时不画主题的背景色，直接用终端自己的背景，半透明的终端（比如 Ghostty 的 `background-opacity`）能透出来；亮色主题照常画背景。
+
 ## 文件管理
 
 dired 里常用：`RET` 打开、`^` 上一级、`m` / `u` 标记 / 取消、`C` 复制、`R` 重命名或移动、
