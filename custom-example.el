@@ -20,6 +20,18 @@
 ;; (setq my-japanese-holidays nil)               ; 不显示日本节假日
 ;; (setq my-use-exec-path-from-shell nil)        ; Mac 上不从 shell 读取 PATH
 
+;; AI 助手（gptel，lisp/init-ai.el）：后端列表和默认模型。改完 M-x my-ai-setup 立即生效
+;; (setq my-ai-backends
+;;       '(("OpenAI" :host "api.openai.com" :key "sk-..."
+;;          :models (gpt-4o gpt-4o-mini))
+;;         ("代理"   :host "proxy.example.com" :key "..."      ; 任何 OpenAI 兼容接口
+;;          :models (some-model other-model))
+;;         ("本地"   :host "192.168.1.10:8080" :protocol "http" ; llama.cpp 等，不需要 key
+;;          :models (local-model))
+;;         ("Claude" :type anthropic :key "sk-ant-..." :models (claude-sonnet-4-5))))
+;; (setq my-ai-default '("代理" . some-model))        ; 默认后端和模型（不设就用第一个）
+;; (setq my-ai-default-mode 'markdown-mode)          ; 对话 buffer 的格式（默认 org-mode）
+
 ;; 启动时最大化
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 

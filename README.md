@@ -118,6 +118,22 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 - 截图到剪贴板：Mac `⌘⌃⇧4`，Linux 用 Spectacle 截图后复制。
 - 终端里的 Emacs（`emacsclient -t`）显示不了图片，只能看到链接。
 
+## AI 助手（gptel）
+
+`lisp/init-ai.el`。后端全部在 `custom.el` 里配：`my-ai-backends`（名字、类型、地址、key、模型列表）和
+`my-ai-default`（默认后端和模型），写法见 `custom-example.el`。OpenAI 兼容接口（各种代理、llama.cpp、vLLM）用默认的
+`openai` 类型，另外支持 `anthropic`、`gemini`、`ollama`。key 也可以不写在 custom.el，写
+`:key gptel-api-key-from-auth-source` 从 `~/.authinfo.gpg` 里按 host 读。改完 `M-x my-ai-setup` 立即生效。
+
+| 按键 | 作用 |
+|---|---|
+| `C-c i i` | 打开对话 buffer（org 格式，`my-ai-default-mode` 可改） |
+| `C-c i s` | 发送：光标之前的内容，或选中的文字（在任何 buffer 里都能用） |
+| `C-c i m` | gptel 菜单：换模型 / 后端、系统提示、把回复输出到哪里 |
+| `C-c i r` | 改写选中的文字（润色、翻译、改代码），可以对比后接受 |
+| `C-c i a` | 把选中的文字或当前 buffer 加进上下文 |
+| `C-c i k` | 中止正在进行的请求 |
+
 ## 常用按键
 
 更完整的速查（Emacs 基础、本配置的按键、Org 按键和语法，可筛选）：[Emacs 与 Org 速查](https://claude.ai/artifact/NKVCaoywSZhVnuGnebscKe)

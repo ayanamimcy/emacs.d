@@ -39,6 +39,9 @@
 (require 'init-vcs)
 (require 'init-prog)
 
+;; AI 助手
+(require 'init-ai)
+
 ;; 所有模块加载完之后，本机的覆盖设置
 (when (file-exists-p my-custom-post-file)
   (load my-custom-post-file nil 'nomessage))
