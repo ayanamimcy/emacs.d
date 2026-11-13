@@ -10,6 +10,25 @@
 (require 'init-custom)
 (require 'init-funcs)
 
+;;; 顶部留白
+
+;; early-init.el 给 Linux 图形窗口打开了一行 tab bar，这里把它变成约 9 像素高的空白：
+;; 内容只有一个空格，字号 5.5pt，背景跟正文一样。要用 tab-bar-mode 的话把这段去掉。
+;; 底部（echo area）没法这样做：mini-window 的高度由 resize-mini-windows 自动收回。
+(defun my-tab-bar-padding ()
+  "tab bar 的内容：一个空白项。"
+  '((my-padding menu-item " " ignore)))
+
+(setq tab-bar-format '(my-tab-bar-padding))
+
+(defun my-tab-bar-padding-face ()
+  "让 tab bar 变成跟背景同色的窄条（主题会改 tab-bar face，换主题后重设）。"
+  (set-face-attribute 'tab-bar nil :inherit 'default :height 55 :box nil
+                      :background 'unspecified :foreground 'unspecified))
+
+(my-tab-bar-padding-face)
+(add-hook 'after-load-theme-hook #'my-tab-bar-padding-face)
+
 ;;; 字体
 
 (defun my-setup-fonts ()

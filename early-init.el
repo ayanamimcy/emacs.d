@@ -22,6 +22,11 @@
   (setq menu-bar-mode nil))
 (when (eq system-type 'darwin)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
+;; Linux 图形窗口顶部留一条空的 tab bar 当上边距（见 init-ui.el）：KDE 下窗口没有标题栏，
+;; 不留的话第一行直接顶在窗口上沿。internal-border-width 只能四边一起加，左右不想动；
+;; 只给 pgtk/x 的 frame，终端里（emacsclient -nw）不占行
+(dolist (ws '(pgtk x))
+  (push '(tab-bar-lines . 1) (alist-get ws window-system-default-frame-alist)))
 
 (setq inhibit-startup-screen t
       inhibit-startup-echo-area-message user-login-name
