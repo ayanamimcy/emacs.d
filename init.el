@@ -41,6 +41,7 @@
 
 ;; AI 助手
 (require 'init-ai)
+(require 'init-claude)               ; Claude Code（claude-code-ide）
 
 ;; 所有模块加载完之后，本机的覆盖设置
 (when (file-exists-p my-custom-post-file)

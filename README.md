@@ -134,6 +134,26 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 | `C-c i a` | 把选中的文字或当前 buffer 加进上下文 |
 | `C-c i k` | 中止正在进行的请求 |
 
+### Claude Code（claude-code-ide）
+
+`lisp/init-claude.el`。在 Emacs 里跑 Claude Code CLI（[claude-code-ide.el](https://github.com/manzaltu/claude-code-ide.el)），
+通过 MCP 和 Emacs 连起来：Claude 知道当前文件和选中的行，改代码时弹 ediff（可以先改它的方案再接受），
+还能调用 xref（LSP 跳转 / 查引用）、imenu、tree-sitter。终端用 eat。
+
+- 需要本机装好 Claude Code（`claude` 在 PATH 里，第一次在终端里运行一次 `claude` 登录）。每台机器各装各的。
+- 包不在软件源里，Emacs 30 以上用 use-package 的 `:vc` 从 GitHub 装，第一次启动时自动 clone；
+  升级 `M-x package-vc-upgrade RET claude-code-ide`。Emacs 29 及以下不加载。
+- 按项目（git 仓库）开会话，同一个项目可以开多个，buffer 名 `*claude-code[项目名]*`。
+
+| 按键 | 作用 |
+|---|---|
+| `C-c i c` | 菜单：开新会话、继续上次 / 恢复以前的对话、显示 / 隐藏窗口、切换会话、停止 |
+| `M-x claude-code-ide` | 在当前项目开一个会话（已经有的话再开一个） |
+| `M-x claude-code-ide-send-prompt` | 在 minibuffer 里写一句发给 Claude |
+| `M-x claude-code-ide-insert-at-mentioned` | 把选中的文字发到 Claude 的输入框 |
+| `C-c C-x`（Claude 终端里） | 不再把当前文件 / 选中的行告诉 Claude |
+| ediff 里 `q` | 看完 Claude 的修改方案后退出，`y` 接受（B 里自己改过的部分一起提交）、`n` 拒绝 |
+
 ## 常用按键
 
 更完整的速查（Emacs 基础、本配置的按键、Org 按键和语法，可筛选）：[Emacs 与 Org 速查](https://claude.ai/artifact/NKVCaoywSZhVnuGnebscKe)
