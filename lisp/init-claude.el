@@ -13,13 +13,16 @@
 
 ;;; Code:
 
+(use-package vterm
+  :defer t)
+
 (use-package claude-code-ide
   :if (>= emacs-major-version 30)
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
   :commands (claude-code-ide claude-code-ide-menu)
   :bind ("C-c i c" . claude-code-ide-menu)
   :custom
-  (claude-code-ide-terminal-backend 'eat) ; 和 init-shell.el 用同一个终端，不用编译 vterm
+  (claude-code-ide-terminal-backend 'vterm)
   :config
   (claude-code-ide-emacs-tools-setup))   ; 让 Claude 能用 xref、imenu、tree-sitter、project
 

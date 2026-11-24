@@ -138,8 +138,9 @@ iOS 上用 Beorg 时，要在 Beorg 的设置里加上 `NEXT`、`WAIT`、`CANCEL
 
 `lisp/init-claude.el`。在 Emacs 里跑 Claude Code CLI（[claude-code-ide.el](https://github.com/manzaltu/claude-code-ide.el)），
 通过 MCP 和 Emacs 连起来：Claude 知道当前文件和选中的行，改代码时弹 ediff（可以先改它的方案再接受），
-还能调用 xref（LSP 跳转 / 查引用）、imenu、tree-sitter。终端用 eat。
+还能调用 xref（LSP 跳转 / 查引用）、imenu、tree-sitter。终端用 vterm。
 
+- vterm 首次使用时需要编译动态模块，需有 CMake 和 C 编译器。
 - 需要本机装好 Claude Code（`claude` 在 PATH 里，第一次在终端里运行一次 `claude` 登录）。每台机器各装各的。
 - 包不在软件源里，Emacs 30 以上用 use-package 的 `:vc` 从 GitHub 装，第一次启动时自动 clone；
   升级 `M-x package-vc-upgrade RET claude-code-ide`。Emacs 29 及以下不加载。
