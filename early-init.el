@@ -12,6 +12,10 @@
 ;; 有 .el 比 .elc 新时加载 .el
 (setq load-prefer-newer noninteractive)
 
+;; 后台原生编译的警告（多是第三方包没跟上新版 Emacs 的过时宏、参数个数）不弹 *Warnings*，
+;; 只记在 *Async-native-compile-log*；编译照常进行，失败的文件照样用 .elc
+(setq native-comp-async-report-warnings-errors 'silent)
+
 ;; 界面：不要工具栏和滚动条；Mac 的菜单栏在屏幕顶部，保留
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
