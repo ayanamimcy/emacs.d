@@ -13,7 +13,7 @@
 
 ;;; Code:
 
-(use-package vterm
+(use-package ghostel
   :defer t)
 
 (use-package claude-code-ide
@@ -22,7 +22,7 @@
   :commands (claude-code-ide claude-code-ide-menu)
   :bind ("C-c i c" . claude-code-ide-menu)
   :custom
-  (claude-code-ide-terminal-backend 'vterm)
+  (claude-code-ide-terminal-backend 'ghostel)
   :config
   (claude-code-ide-emacs-tools-setup))   ; 让 Claude 能用 xref、imenu、tree-sitter、project
 
